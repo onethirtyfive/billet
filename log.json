@@ -1,0 +1,75 @@
+{
+  "digestAlgorithm": "sha256",
+  "rootTopic": "root",
+  "expressionEngine": "jsonata",
+  "aliasToUUID": {
+    "root": "285ea985-f51d-47e6-bdd8-1fd56fd0fedc",
+    "anticipations": "1e3c5d1c-b9db-43fa-a3f6-29f46821d5f6"
+  },
+  "uuidToOrderedDownstreams": {
+    "285ea985-f51d-47e6-bdd8-1fd56fd0fedc": [
+      [
+        "1e3c5d1c-b9db-43fa-a3f6-29f46821d5f6",
+        "$match(event, /anticipation.*/)[]"
+      ]
+    ],
+    "1e3c5d1c-b9db-43fa-a3f6-29f46821d5f6": [
+    ]
+  },
+  "uuidToOrderedIndex": {
+    "285ea985-f51d-47e6-bdd8-1fd56fd0fedc": [
+      [
+        "e5f60376bce90765e7911f387422854ce6ea4ba4b86a4b07f8cd78b2d48e394b",
+        0
+      ],
+      [
+        "fafc778aea7fc3f04a9b0c8cb5d07ac6aa358dde2c127bb9e2a0a7ec603a6e70",
+        1
+      ]
+    ],
+    "1e3c5d1c-b9db-43fa-a3f6-29f46821d5f6": [
+      [
+        "e5f60376bce90765e7911f387422854ce6ea4ba4b86a4b07f8cd78b2d48e394b",
+        0
+      ],
+      [
+        "fafc778aea7fc3f04a9b0c8cb5d07ac6aa358dde2c127bb9e2a0a7ec603a6e70",
+        1
+      ]
+    ]
+  },
+  "orderedEntries": [
+    [
+      "e5f60376bce90765e7911f387422854ce6ea4ba4b86a4b07f8cd78b2d48e394b",
+      {
+        "timestamp": 1632974404123,
+        "event": "anticipation.create",
+        "context": {
+          "uuid": "123e4567-e89b-12d3-a456-426614174000",
+          "attributes": {
+            "name": "Lindsey Repayment",
+            "wealthEffect": "gain",
+            "eventuality": "imminent",
+            "amount": 1234.56
+          }
+        }
+      }
+    ],
+    [
+      "fafc778aea7fc3f04a9b0c8cb5d07ac6aa358dde2c127bb9e2a0a7ec603a6e70",
+      {
+        "timestamp": 1632974450402,
+        "event": "anticipation.patch",
+        "context": {
+          "uuid": "123e4567-e89b-12d3-a456-426614174000",
+          "attributes": {
+            "name": "Lindsey Repayment (1 of 3)",
+            "eventuality": "imminent",
+            "amount": 400.00
+          }
+        },
+        "predecessor": "e5f60376bce90765e7911f387422854ce6ea4ba4b86a4b07f8cd78b2d48e394b"
+      }
+    ]
+  ]
+}
