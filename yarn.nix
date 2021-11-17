@@ -1786,6 +1786,14 @@
       };
     }
     {
+      name = "immer___immer_9.0.6.tgz";
+      path = fetchurl {
+        name = "immer___immer_9.0.6.tgz";
+        url  = "https://registry.yarnpkg.com/immer/-/immer-9.0.6.tgz";
+        sha1 = "7a96bf2674d06c8143e327cbf73539388ddf1a73";
+      };
+    }
+    {
       name = "import_fresh___import_fresh_3.3.0.tgz";
       path = fetchurl {
         name = "import_fresh___import_fresh_3.3.0.tgz";
@@ -2375,6 +2383,14 @@
         name = "json5___json5_2.2.0.tgz";
         url  = "https://registry.yarnpkg.com/json5/-/json5-2.2.0.tgz";
         sha1 = "2dfefe720c6ba525d9ebd909950f0515316c89a3";
+      };
+    }
+    {
+      name = "jsonata___jsonata_1.8.5.tgz";
+      path = fetchurl {
+        name = "jsonata___jsonata_1.8.5.tgz";
+        url  = "https://registry.yarnpkg.com/jsonata/-/jsonata-1.8.5.tgz";
+        sha1 = "c656c929c92b3fb097792cef661c27c52dfa5148";
       };
     }
     {
@@ -3615,6 +3631,14 @@
         name = "uri_js___uri_js_4.4.1.tgz";
         url  = "https://registry.yarnpkg.com/uri-js/-/uri-js-4.4.1.tgz";
         sha1 = "9b1a52595225859e55f669d928f88c6c57f2a77e";
+      };
+    }
+    {
+      name = "uuid___uuid_8.3.2.tgz";
+      path = fetchurl {
+        name = "uuid___uuid_8.3.2.tgz";
+        url  = "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz";
+        sha1 = "80d5b5ced271bb9af6c445f21a1a04c606cefbe2";
       };
     }
     {

@@ -18,7 +18,6 @@ in mkShell {
     nodejs
     yarn2nix
     yarnPkg
-    jq
   ];
 
   shellHook = ''
