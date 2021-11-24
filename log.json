@@ -1,12 +1,17 @@
 {
-  "digestAlgorithm": "sha256",
-  "rootTopic": "root",
+"digestAlgorithm": "sha256",
   "expressionEngine": "jsonata",
-  "aliasToUUID": {
-    "root": "285ea985-f51d-47e6-bdd8-1fd56fd0fedc",
-    "anticipations": "1e3c5d1c-b9db-43fa-a3f6-29f46821d5f6"
-  },
-  "uuidToOrderedDownstreams": {
+  "aliases": [
+    [
+      "root",
+      "285ea985-f51d-47e6-bdd8-1fd56fd0fedc"
+    ],
+    [
+      "anticipations",
+      "1e3c5d1c-b9db-43fa-a3f6-29f46821d5f6"
+    ]
+  ],
+  "downstreams": {
     "285ea985-f51d-47e6-bdd8-1fd56fd0fedc": [
       [
         "1e3c5d1c-b9db-43fa-a3f6-29f46821d5f6",
@@ -16,7 +21,7 @@
     "1e3c5d1c-b9db-43fa-a3f6-29f46821d5f6": [
     ]
   },
-  "uuidToOrderedIndex": {
+  "caches": {
     "285ea985-f51d-47e6-bdd8-1fd56fd0fedc": [
       [
         "e5f60376bce90765e7911f387422854ce6ea4ba4b86a4b07f8cd78b2d48e394b",
@@ -38,7 +43,7 @@
       ]
     ]
   },
-  "orderedEntries": [
+  "entries": [
     [
       "e5f60376bce90765e7911f387422854ce6ea4ba4b86a4b07f8cd78b2d48e394b",
       {
