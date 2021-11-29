@@ -1154,6 +1154,14 @@
       };
     }
     {
+      name = "dsa.js___dsa.js_2.7.5.tgz";
+      path = fetchurl {
+        name = "dsa.js___dsa.js_2.7.5.tgz";
+        url  = "https://registry.yarnpkg.com/dsa.js/-/dsa.js-2.7.5.tgz";
+        sha1 = "5cba45fd192477296e4644a6e892b485f0bb3257";
+      };
+    }
+    {
       name = "electron_to_chromium___electron_to_chromium_1.3.857.tgz";
       path = fetchurl {
         name = "electron_to_chromium___electron_to_chromium_1.3.857.tgz";
