@@ -1,35 +1,34 @@
 import { readFileSync } from 'fs'
 import { enableMapSet } from 'immer'
-import { modify } from './lib/producers.mjs'
-import { fronting, registering } from './lib/facades.mjs'
+import { ingesting } from './lib/ingestion.mjs'
+import { changing, sourcing } from './lib/lom.mjs'
 import { graphing } from './lib/graph.mjs'
 
 enableMapSet()
 
-const persistedLog = JSON.parse(readFileSync('log.json'))
-const facade = fronting(persistedLog)
-
-let registry
-let newFacade = modify(facade)
+const logData = JSON.parse(readFileSync('log.json'))
+const lom = ingesting(logData)
+const newLOM = changing(lom)
   .define('joel')
   .define('joshua')
-  .freeze()
-
-// print joel uuid
-registry = registering(newFacade)
-
-newFacade = modify(newFacade)
   .realias('joel', 'stephanie')
-  .relate('root', 'joshua', "$match(event,'gavePresent')")
-  .relate('joshua', 'stephanie', "$match(event,'gavePresent')")
+  .relate('root', 'joshua')
+  .relate('joshua', 'stephanie')
   .freeze()
 
-registry = registering(newFacade)
-const graph = graphing(registry)
+const source = sourcing(newLOM)
+const graph = graphing(source)
 
-newFacade.aliases.forEach((uuid, alias) => {
+console.log('\n*** GRAPH NODES ***\n\n')
+for (const [_, node] of graph.nodes) {
+  console.log(node.value.uuid)
+  console.log(`adjacents: ${node.getAdjacents().map(n => n.value.uuid).join(', ')}`)
+  console.log()
+}
+
+console.log('\n*** LOM ***\n\n')
+newLOM.aliases.forEach((uuid, alias) => {
   console.log(alias)
-  console.log(registry.topicAt(uuid))
+  console.log(source.topicAt(uuid))
+  console.log()
 })
-
-console.log('hello')
