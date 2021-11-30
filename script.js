@@ -1,14 +1,13 @@
 import { readFileSync } from 'fs'
 import { enableMapSet } from 'immer'
-import { ingesting } from './lib/ingestion.mjs'
-import { changing, sourcing } from './lib/lom.mjs'
-import { graphing } from './lib/graph.mjs'
+import { prepare, changing, sourcing } from './lib/lom.mjs'
+import { graph } from './lib/graph.mjs'
 
 enableMapSet()
 
-const logData = JSON.parse(readFileSync('log.json'))
-const lom = ingesting(logData)
-const newLOM = changing(lom)
+const persisted = JSON.parse(readFileSync('log.json'))
+
+const lom = changing(prepare(persisted))
   .define('joel')
   .define('joshua')
   .realias('joel', 'stephanie')
@@ -16,19 +15,19 @@ const newLOM = changing(lom)
   .relate('joshua', 'stephanie')
   .freeze()
 
-const source = sourcing(newLOM)
-const graph = graphing(source)
+const topics = sourcing(lom)
+const nodes = graph(topics).nodes
 
 console.log('\n*** GRAPH NODES ***\n\n')
-for (const [_, node] of graph.nodes) {
+for (const [_, node] of nodes) {
   console.log(node.value.uuid)
   console.log(`adjacents: ${node.getAdjacents().map(n => n.value.uuid).join(', ')}`)
   console.log()
 }
 
 console.log('\n*** LOM ***\n\n')
-newLOM.aliases.forEach((uuid, alias) => {
+lom.aliases.forEach((uuid, alias) => {
   console.log(alias)
-  console.log(source.topicAt(uuid))
+  console.log(topics.topicAt(uuid))
   console.log()
 })
