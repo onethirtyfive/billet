@@ -25,9 +25,10 @@ const _graph = graph(topics)
 const log = make(_graph, lom.entries)
 
 console.log('\n\n*** GRAPH NODES ***\n\n')
-for (const [_, node] of _graph.nodes) {
-  console.log(node.value.uuid)
-  console.log(`adjacents: ${node.getAdjacents().map(n => n.value.uuid).join(', ')}`)
+for (const [value, node] of _graph.nodes) {
+  const fnGetUUID = node => node.value.uuid
+  console.log(value.uuid)
+  console.log(`adjacents: ${node.getAdjacents().map(fnGetUUID).join(', ')}`)
   console.log()
 }
 
