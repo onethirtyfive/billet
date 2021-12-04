@@ -15,7 +15,7 @@
     "285ea985-f51d-47e6-bdd8-1fd56fd0fedc": [
       [
         "1e3c5d1c-b9db-43fa-a3f6-29f46821d5f6",
-        "$match(event, /anticipation.*/)[]"
+        "$boolean($match(event, /anticipation.*/)[])"
       ]
     ],
     "1e3c5d1c-b9db-43fa-a3f6-29f46821d5f6": [
