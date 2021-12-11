@@ -1,5 +1,5 @@
 {
-"digestAlgorithm": "sha256",
+  "checksumAlgorithm": "md5",
   "expressionEngine": "jsonata",
   "aliases": [
     [
@@ -23,58 +23,41 @@
   },
   "caches": {
     "285ea985-f51d-47e6-bdd8-1fd56fd0fedc": [
-      [
-        "e5f60376bce90765e7911f387422854ce6ea4ba4b86a4b07f8cd78b2d48e394b",
-        0
-      ],
-      [
-        "fafc778aea7fc3f04a9b0c8cb5d07ac6aa358dde2c127bb9e2a0a7ec603a6e70",
-        1
-      ]
+      ["52aa3d8c-e84d-4856-b316-b2401d0208f4", 0],
+      ["a4e361d4-7300-46a7-a14e-69a7870c6db4", 1]
     ],
     "1e3c5d1c-b9db-43fa-a3f6-29f46821d5f6": [
-      [
-        "e5f60376bce90765e7911f387422854ce6ea4ba4b86a4b07f8cd78b2d48e394b",
-        0
-      ],
-      [
-        "fafc778aea7fc3f04a9b0c8cb5d07ac6aa358dde2c127bb9e2a0a7ec603a6e70",
-        1
-      ]
+      ["52aa3d8c-e84d-4856-b316-b2401d0208f4", 0],
+      ["a4e361d4-7300-46a7-a14e-69a7870c6db4", 1]
     ]
   },
-  "entries": [
+  "universe": [
     [
-      "e5f60376bce90765e7911f387422854ce6ea4ba4b86a4b07f8cd78b2d48e394b",
       {
+        "uuid": "52aa3d8c-e84d-4856-b316-b2401d0208f4",
         "timestamp": 1632974404123,
         "event": "anticipation.create",
         "context": {
-          "uuid": "123e4567-e89b-12d3-a456-426614174000",
-          "attributes": {
-            "name": "Lindsey Repayment",
-            "wealthEffect": "gain",
-            "eventuality": "imminent",
-            "amount": 1234.56
-          }
+          "name": "Lindsey Repayment",
+          "wealthEffect": "gain",
+          "eventuality": "imminent",
+          "amount": 1234.56
         }
-      }
+      },
+      ""
     ],
     [
-      "fafc778aea7fc3f04a9b0c8cb5d07ac6aa358dde2c127bb9e2a0a7ec603a6e70",
       {
+        "uuid": "a4e361d4-7300-46a7-a14e-69a7870c6db4",
         "timestamp": 1632974450402,
         "event": "anticipation.patch",
         "context": {
-          "uuid": "123e4567-e89b-12d3-a456-426614174000",
-          "attributes": {
-            "name": "Lindsey Repayment (1 of 3)",
-            "eventuality": "imminent",
-            "amount": 400.00
-          }
-        },
-        "predecessor": "e5f60376bce90765e7911f387422854ce6ea4ba4b86a4b07f8cd78b2d48e394b"
-      }
+          "name": "Lindsey Repayment (1 of 3)",
+          "eventuality": "imminent",
+          "amount": 400.00
+        }
+      },
+      ""
     ]
   ]
 }
