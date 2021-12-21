@@ -1,3 +1,7 @@
+# MacOS ignores
+.direnv
+.DS_Store
+
 # devenv ignores
 result
 
