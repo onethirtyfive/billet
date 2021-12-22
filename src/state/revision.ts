@@ -51,11 +51,11 @@ function onto (draft: Draft<Billet.State>) {
 
     propagate: (
       from: Billet.Alias,
-      predicate: Billet.Predicate,
-      to: Billet.Alias
+      to: Billet.Alias,
+      predicate: Billet.Predicate
     ) => {
       const fromUUID = aliases.get(from)!
-      const expression = `$boolean(${predicate})`
+      const expression = `$boolean(${predicate || true})`
       const toUUID = aliases.get(to)!
       const criteria = propagations.get(fromUUID)!
       assert(
@@ -88,11 +88,11 @@ function revise (state: Billet.State): Billet.Revision {
 
     propagate: (
       from: Billet.Alias,
-      predicate: Billet.Predicate, // TODO: make 3rd arg so it can have default!
-      to: Billet.Alias
+      to: Billet.Alias,
+      predicate: Billet.Predicate = 'true',
     ) =>
       revise(
-        produce(state, draft => onto(draft).propagate(from, predicate, to))
+        produce(state, draft => onto(draft).propagate(from, to, predicate))
       ),
 
     // append: (

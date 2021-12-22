@@ -19,7 +19,7 @@ declare namespace Billet {
   export interface Revision {
     define: (alias: Alias, uuid?: UUID) => Revision
     realias: (alias: Alias, newAlias: Alias) => Revision
-    propagate: (from: Alias, to: Alias, predicate: Predicate) => Revision
+    propagate: (from: Alias, to: Alias, predicate?: Predicate) => Revision
     done: () => State
   }
 

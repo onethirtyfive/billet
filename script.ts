@@ -6,9 +6,9 @@ import { enableMapSet } from 'immer'
 import { v4 as uuidv4 } from 'uuid'
 
 // billet
-import { loadState } from './lib/state/loading.js'
-import { revising } from './lib/state/revision.js'
-import { mkTopics } from './lib/topics.js'
+import { loadState } from './src/state/loading.js'
+import { revising } from './src/state/revision.js'
+import { mkTopics } from './src/topics.js'
 
 enableMapSet()
 
@@ -19,8 +19,8 @@ state = revising(state)
   .define('joel')
   .define('joshua')
   .realias('joel', 'stephanie')
-  .propagate('root', '$match(event, /anticipations.foo/)[]', 'joshua')
-  .propagate('joshua', 'false', 'stephanie')
+  .propagate('root', 'joshua', '$match(event, /anticipations.foo/)[]')
+  .propagate('joshua', 'stephanie')
   .done()
 
 let topics = mkTopics(state)
