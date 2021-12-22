@@ -16,6 +16,7 @@ in mkShell {
 
   nativeBuildInputs = with pkgs; [
     nodejs
+    yarn
     yarn2nix
     yarnPkg
   ];

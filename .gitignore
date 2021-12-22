@@ -3,6 +3,8 @@
 .DS_Store
 
 # devenv ignores
+coverage
+dist
 result
 
 # javascript ignores

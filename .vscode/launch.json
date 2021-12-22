@@ -8,7 +8,7 @@ l.!
 
   {
     "name": "Launch Program",
-    "program": "${workspaceFolder}/script.js",
+    "program": "${workspaceFolder}/script.ts",
     "request": "launch",
     "skipFiles": [
       "<node_internals>/**"

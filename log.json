@@ -11,11 +11,11 @@
       "1e3c5d1c-b9db-43fa-a3f6-29f46821d5f6"
     ]
   ],
-  "downstreams": {
+  "propagations": {
     "285ea985-f51d-47e6-bdd8-1fd56fd0fedc": [
       [
-        "1e3c5d1c-b9db-43fa-a3f6-29f46821d5f6",
-        "$boolean($match(event, /anticipation.*/)[])"
+        "$boolean($match(event, /anticipation.*/)[])",
+        "1e3c5d1c-b9db-43fa-a3f6-29f46821d5f6"
       ]
     ],
     "1e3c5d1c-b9db-43fa-a3f6-29f46821d5f6": [
@@ -33,6 +33,7 @@
   },
   "universe": [
     [
+      "",
       {
         "uuid": "52aa3d8c-e84d-4856-b316-b2401d0208f4",
         "timestamp": 1632974404123,
@@ -43,10 +44,10 @@
           "eventuality": "imminent",
           "amount": 1234.56
         }
-      },
-      ""
+      }
     ],
     [
+      "",
       {
         "uuid": "a4e361d4-7300-46a7-a14e-69a7870c6db4",
         "timestamp": 1632974450402,
@@ -56,8 +57,7 @@
           "eventuality": "imminent",
           "amount": 400.00
         }
-      },
-      ""
+      }
     ]
   ]
 }
