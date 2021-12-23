@@ -15,7 +15,7 @@
     "lib": "lib"
   },
   "scripts": {
-    "sandbox": "TS_NODE_PROJECT=./tsconfig.json node --loader ts-node/esm ./script.ts",
+    "sandbox": "TS_NODE_PROJECT=./tsconfig.json node --loader ts-node/esm ./sandbox.ts",
     "test": "jest --coverage --watch"
   },
   "dependencies": {
