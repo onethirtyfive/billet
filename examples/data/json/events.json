@@ -1,0 +1,91 @@
+{
+  "events": [
+    {
+      "uuid": "e691ef61-23fc-45e1-872a-d05ee798efa6",
+      "name": "__billet__.settings:update",
+      "timestamp": 1640412154351,
+      "context": {
+        "checksumAlgorithm": "md5"
+      }
+    },
+    {
+      "uuid": "9b5ca8a9-0f36-45cd-887f-8ff755b541a3",
+      "name": "__billet__.graph.topic:upsert",
+      "timestamp": 1640412154361,
+      "context": {
+        "alias": "__billet__",
+        "uuid": "28dbf15b-3c4d-4f9a-a227-73f648ba65fc"
+      }
+    },
+    {
+      "uuid": "2900a5b3-1d9b-41b2-a8b2-e349cdf3f027",
+      "name": "__billet__.graph.topic:upsert",
+      "timestamp": 1640412154371,
+      "context": {
+        "alias": "root",
+        "uuid": "9d91b1d8-adf9-46e2-b878-53a3ce6b006d"
+      }
+    },
+    {
+      "uuid": "52aa3d8c-e84d-4856-b316-b2401d0208f4",
+      "name": "__billet__:snapshot",
+      "timestamp": 1640412154381,
+      "context": {
+        "settings": {
+          "checksumAlgorithm": "md5"
+        },
+        "aliases": {
+          "__billet__": "28dbf15b-3c4d-4f9a-a227-73f648ba65fc",
+          "root": "285ea985-f51d-47e6-bdd8-1fd56fd0fedc",
+          "anticipations": "1e3c5d1c-b9db-43fa-a3f6-29f46821d5f6"
+        },
+        "relations": {
+          "285ea985-f51d-47e6-bdd8-1fd56fd0fedc": [
+            [
+              "jsonata:$boolean($match(name, /anticipation.*/)[])",
+              "1e3c5d1c-b9db-43fa-a3f6-29f46821d5f6"
+            ]
+          ],
+          "1e3c5d1c-b9db-43fa-a3f6-29f46821d5f6": [
+          ]
+        },
+        "receipts": {
+          "28dbf15b-3c4d-4f9a-a227-73f648ba65fc": [0, 1, 2, 3],
+          "1e3c5d1c-b9db-43fa-a3f6-29f46821d5f6": [4, 5]
+        }
+      }
+    },
+    {
+      "uuid": "dac51333-be2c-47bd-ae9b-f0bd9bbf4a8a",
+      "name": "__billet__.graph.topic:upsert",
+      "timestamp": 1640412154391,
+      "context": {
+        "alias": "anticipations",
+        "uuid": "9d91b1d8-adf9-46e2-b878-53a3ce6b006d"
+      }
+    },
+    {
+      "uuid": "52aa3d8c-e84d-4856-b316-b2401d0208f4",
+      "name": "anticipation.create",
+      "timestamp": 1640412155401,
+      "context": {
+        "name": "Lindsey Repayment",
+        "wealthEffect": "gain",
+        "eventuality": "imminent",
+        "amount": 1234.56
+      },
+      "propagations": []
+    },
+    {
+      "uuid": "a4e361d4-7300-46a7-a14e-69a7870c6db4",
+      "name": "anticipation.patch",
+      "timestamp": 1640412156411,
+      "context": {
+        "name": "Lindsey Repayment (1 of 3)",
+        "eventuality": "imminent",
+        "amount": 400.00
+      },
+      "propagations": []
+    }
+  ]
+}

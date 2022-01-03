@@ -8,5 +8,8 @@
   },
   "files.watcherExclude": {
     "dist/**": true
+  },
+  "workbench.editorAssociations": {
+    "*.msgpack": "hexEditor.hexEdit"
   }
 }

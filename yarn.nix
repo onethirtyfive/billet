@@ -1,4 +1,4 @@
-{ fetchurl, fetchgit, linkFarm, runCommandNoCC, gnutar }: rec {
+{ fetchurl, fetchgit, linkFarm, runCommand, gnutar }: rec {
   offline_cache = linkFarm "offline" packages;
   packages = [
     {
@@ -463,6 +463,14 @@
         name = "_jest_types___types_27.4.2.tgz";
         url  = "https://registry.yarnpkg.com/@jest/types/-/types-27.4.2.tgz";
         sha1 = "96536ebd34da6392c2b7c7737d693885b5dd44a5";
+      };
+    }
+    {
+      name = "_msgpack_msgpack___msgpack_2.7.1.tgz";
+      path = fetchurl {
+        name = "_msgpack_msgpack___msgpack_2.7.1.tgz";
+        url  = "https://registry.yarnpkg.com/@msgpack/msgpack/-/msgpack-2.7.1.tgz";
+        sha1 = "f01954baadc502f3c82e9c3f72c740ce65eae1cc";
       };
     }
     {

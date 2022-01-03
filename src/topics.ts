@@ -1,18 +1,22 @@
+import { strict as assert } from 'assert'
 import jsonata from 'jsonata'
 
-function curriedLookups(
-  { aliases, propagations, caches }: Billet.State
-) {
-  const byAlias = [...aliases.entries()].reduce((acc, [alias, uuid]) => {
-    const predicates = propagations.get(uuid)!
-    const cache = caches.get(uuid)!
-    return new Map([...acc.entries(), [alias, { uuid, predicates, cache }]])
-  }, new Map<Billet.Alias, Billet.Topic>())
+function curriedLookups({ aliases, relations, receipts }: Billet.Snapshot) {
+  const byAlias = [...Object.entries(aliases)].reduce((acc, [alias, uuid]) => {
+    const topic: Billet.Topic = 
+    acc[alias] = {
+      alias,
+      uuid,
+      contingentPaths: relations[uuid]!,
+      propagations: receipts[uuid]!
+    }
+    return acc
+  }, <Billet.ByAlias>{})
 
-  const byUUID = [...byAlias.values()].reduce(
-    (acc, topic) => new Map([...acc.entries(), [topic.uuid, topic]]),
-    new Map<Billet.UUID, Billet.Topic>()
-  )
+  const byUUID = [...Object.entries(byAlias)].reduce((acc, [alias, topic]) => {
+    acc[topic.uuid] = byAlias[alias]
+    return acc
+  }, <Billet.ByUUID>{})
 
   return { byAlias, byUUID } // n.b. lookups share object references
 }
@@ -20,54 +24,51 @@ function curriedLookups(
 function curriedTraversals (
   { byAlias, byUUID }: Billet.Lookups
 ) {
-  const root = byAlias.get('root')!
+  const root = byAlias['root']
 
   return {
-    plan: (event: Billet.Event): Billet.Plan => {
-      const recursivePlan = (visitee: Billet.Topic, acc: Set<Billet.Topic>) => {
+    plan: (event: Billet.BaseEvent): Billet.Propagations => {
+      const recursivePlan = (visitee: Billet.Topic, acc: Billet.Propagations) => {
         const propagations =
-          [...visitee.predicates.entries()]
-            .filter(
-              ([predicate, ]) =>jsonata(predicate).evaluate(event) === true
-            )
-            .map(([predicate, uuid]) => byUUID.get(uuid)!)
+          [...visitee.contingentPaths.entries()].filter(([expr, ]) => {
+            const [engine, query] = expr.split(':')
+            assert(engine === 'jsonata')
+            return jsonata(query).evaluate(event) === true
+          }).map(([, uuid]) => byUUID[uuid]!)
         for (const topic of propagations) {
-          acc.add(topic)
+          acc.push(topic.uuid)
           recursivePlan(topic, acc)
         }
       }
-      const propagations = new Set<Billet.Topic>()
+      const propagations = <Billet.Propagations>[root.uuid]
       recursivePlan(root, propagations)
       return propagations
     },
 
     validate: (): void => {
       const recursiveValidate = (
-        visitee: Billet.UUID,
-        crumbs: Set<Billet.UUID>
+        visitee: Billet.Topic,
+        crumbs: Billet.Propagations
       ) => {
-        const topic = byUUID.get(visitee)!
-        const uuids = [...topic.predicates.values()]
-        const cycles = [...uuids].filter(uuid => crumbs.has(uuid))
+        const uuids = [...visitee.contingentPaths.values()]
+        const cycles = [...uuids].filter(uuid => uuid in crumbs)
         if (cycles.length > 0) {
-          const trace = [...crumbs]
-          throw new Error(`cycles: ${cycles} (crumbs: ${trace.join('➤')})`)
+          throw new Error(`cycles: ${cycles} (at: ${[...crumbs].join('➤')})`)
         } else {
           uuids.forEach(uuid => {
-            crumbs.add(uuid)
-            recursiveValidate(uuid, crumbs)
-            crumbs.delete(uuid)
+            crumbs.push(uuid)
+            recursiveValidate(byUUID[uuid]!, crumbs)
+            crumbs.pop()
           })
         }
       }
-      const { uuid } = root
-      recursiveValidate(uuid, new Set([uuid]))
+      recursiveValidate(root, [root.uuid])
     }
   }
 }
 
-function make (state: Billet.State): Billet.Topics {
-  const lookups = curriedLookups(state)
+function construct (snapshot: Billet.Snapshot) {
+  const lookups = curriedLookups(snapshot)
   const traversals = curriedTraversals(lookups)
   return {
     ...lookups,
@@ -75,4 +76,6 @@ function make (state: Billet.State): Billet.Topics {
   }
 }
 
-export { make as mkTopics }
+const lib = { curriedLookups, curriedTraversals }
+
+export { construct, lib }

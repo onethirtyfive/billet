@@ -15,7 +15,9 @@
     "lib": "lib"
   },
   "scripts": {
-    "sandbox": "TS_NODE_PROJECT=./tsconfig.json node --loader ts-node/esm ./sandbox.ts",
+    "readJson": "TS_NODE_PROJECT=./tsconfig.json pushd examples && node --loader ts-node/esm ./readJson.ts ./data/json/events.json",
+    "readMsgpack": "TS_NODE_PROJECT=./tsconfig.json pushd examples && node --loader ts-node/esm ./readMsgpack.ts ./data/msgpack/events.msgpack",
+    "writeMsgpack": "TS_NODE_PROJECT=./tsconfig.json pushd examples && node --loader ts-node/esm ./writeMsgpack.ts ./data/json/events.json ./data/msgpack/events.msgpack",
     "test": "jest --coverage --watch"
   },
   "dependencies": {
@@ -24,7 +26,8 @@
     "object-hash": "^2.2.0",
     "uuid": "^8.3.2",
     "@types/uuid": "^8.3.3",
-    "@types/object-hash": "^2.2.1"
+    "@types/object-hash": "^2.2.1",
+    "@msgpack/msgpack": "^2.7.1"
   },
   "devDependencies": {
     "jest": "^27.1.2",
