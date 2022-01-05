@@ -15,9 +15,8 @@
     "lib": "lib"
   },
   "scripts": {
-    "readJson": "TS_NODE_PROJECT=./tsconfig.json pushd examples && node --loader ts-node/esm ./readJson.ts ./data/json/events.json",
-    "readMsgpack": "TS_NODE_PROJECT=./tsconfig.json pushd examples && node --loader ts-node/esm ./readMsgpack.ts ./data/msgpack/events.msgpack",
-    "writeMsgpack": "TS_NODE_PROJECT=./tsconfig.json pushd examples && node --loader ts-node/esm ./writeMsgpack.ts ./data/json/events.json ./data/msgpack/events.msgpack",
+    "planEvent": "TS_NODE_PROJECT=./tsconfig.json node --loader ts-node/esm $PWD/examples/planEvent.ts",
+    "generateMsgpack": "TS_NODE_PROJECT=./tsconfig.json node --loader ts-node/esm $PWD/examples/generateMsgpack.ts",
     "test": "jest --coverage --watch"
   },
   "dependencies": {

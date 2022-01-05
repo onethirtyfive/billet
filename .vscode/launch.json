@@ -5,12 +5,12 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Launch 'Read Json''",
+      "name": "Launch 'Plan event (multijson)''",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/examples/readJson.ts",
+      "program": "${workspaceFolder}/examples/planEvent.ts",
       "args": [
-        "${workspaceFolder}/examples/data/json/events.json"
+        "multijson"
       ],
       "skipFiles": [
         "<node_internals>/**"
@@ -18,12 +18,12 @@
       "outFiles": ["${workspaceFolder}/dist/**/*.js"]
     },
     {
-      "name": "Launch 'Read Msgpack'",
+      "name": "Launch 'Plan event (msgpack)'",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/examples/readMsgpack.ts",
+      "program": "${workspaceFolder}/examples/planEvent.ts",
       "args": [
-        "${workspaceFolder}/examples/data/msgpack/events.msgpack"
+        "multijson"
       ],
       "skipFiles": [
         "<node_internals>/**"
@@ -31,14 +31,10 @@
       "outFiles": ["${workspaceFolder}/dist/**/*.js"]
     },
     {
-      "name": "Launch 'Write Msgpack'",
+      "name": "Launch 'Generate msgpack'",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/examples/writeMsgpack.ts",
-      "args": [
-        "${workspaceFolder}/examples/data/json/events.json",
-        "${workspaceFolder}/examples/data/msgpack/events.msgpack"
-      ],
+      "program": "${workspaceFolder}/examples/generateMsgpack.ts",
       "skipFiles": [
         "<node_internals>/**"
       ],

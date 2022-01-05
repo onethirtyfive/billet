@@ -1,28 +1,3 @@
-import {
-  deserializeMetaEvent,
-  deserializePropagatedEvent
-} from './deserialization.js'
-
-function deserializing (source: AsyncIterable<object>) {
-  return {
-    async * [Symbol.asyncIterator]() {
-      for await (const item of source) {
-        const name = (item as any)['name']
-        switch (name) {
-          case '__billet__.settings:update':
-          case '__billet__.graph.topic:upsert':
-          case '__billet__:snapshot':
-            yield deserializeMetaEvent(name, item) as Billet.MetaEvent
-            break
-          default:
-            yield deserializePropagatedEvent(item) as Billet.BaseEvent
-            break
-        }
-      }
-    }
-  }
-}
-
 type FnAssess<T> = (item: T) => boolean
 
 function filtering<T> (source: AsyncIterable<T>, fnAssess: FnAssess<T>) {
@@ -140,4 +115,4 @@ function λevents<T extends Billet.BaseEvent>(events: AsyncIterable<T>) {
   }
 }
 
-export { deserializing, λ, λevents }
+export { λevents }
