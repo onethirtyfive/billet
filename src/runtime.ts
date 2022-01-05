@@ -2,29 +2,31 @@ import { strict as assert } from 'assert'
 import jsonata from 'jsonata'
 
 function curriedLookups({ aliases, relations, receipts }: Billet.Snapshot) {
-  const byAlias = [...Object.entries(aliases)].reduce((acc, [alias, uuid]) => {
-    const topic: Billet.Topic = 
-    acc[alias] = {
-      alias,
-      uuid,
-      contingentPaths: relations[uuid]!,
-      propagations: receipts[uuid]!
-    }
+  const topicsByAlias = [...Object.entries(aliases)]
+    .reduce((acc, [alias, uuid]) => {
+      const topic: Billet.Topic =
+      acc[alias] = {
+        alias,
+        uuid,
+        contingentPaths: relations[uuid]!,
+        propagations: receipts[uuid]!
+      }
     return acc
   }, <Billet.ByAlias>{})
 
-  const byUUID = [...Object.entries(byAlias)].reduce((acc, [alias, topic]) => {
-    acc[topic.uuid] = byAlias[alias]
-    return acc
-  }, <Billet.ByUUID>{})
+  const topicsByUUID = [...Object.entries(topicsByAlias)]
+    .reduce((acc, [alias, topic]) => {
+      acc[topic.uuid] = topicsByAlias[alias]
+      return acc
+    }, <Billet.ByUUID>{})
 
-  return { byAlias, byUUID } // n.b. lookups share object references
+  return { topicsByAlias, topicsByUUID } // n.b. lookups share object references
 }
 
 function curriedTraversals (
-  { byAlias, byUUID }: Billet.Lookups
+  { topicsByAlias, topicsByUUID }: Billet.Lookups
 ) {
-  const root = byAlias['root']
+  const root = topicsByAlias['root']
 
   return {
     plan: (event: Billet.BaseEvent): Billet.Propagations => {
@@ -33,8 +35,8 @@ function curriedTraversals (
           [...visitee.contingentPaths.entries()].filter(([expr, ]) => {
             const [engine, query] = expr.split(':')
             assert(engine === 'jsonata')
-            return jsonata(query).evaluate(event) === true
-          }).map(([, uuid]) => byUUID[uuid]!)
+            return !!jsonata(query).evaluate(event)
+          }).map(([, uuid]) => topicsByUUID[uuid]!)
         for (const topic of propagations) {
           acc.push(topic.uuid)
           recursivePlan(topic, acc)
@@ -57,7 +59,7 @@ function curriedTraversals (
         } else {
           uuids.forEach(uuid => {
             crumbs.push(uuid)
-            recursiveValidate(byUUID[uuid]!, crumbs)
+            recursiveValidate(topicsByUUID[uuid]!, crumbs)
             crumbs.pop()
           })
         }
@@ -67,10 +69,11 @@ function curriedTraversals (
   }
 }
 
-function construct (snapshot: Billet.Snapshot) {
+function bootstrap (snapshot: Billet.Snapshot) {
   const lookups = curriedLookups(snapshot)
   const traversals = curriedTraversals(lookups)
   return {
+    settings: snapshot.settings,
     ...lookups,
     ...traversals
   }
@@ -78,4 +81,4 @@ function construct (snapshot: Billet.Snapshot) {
 
 const lib = { curriedLookups, curriedTraversals }
 
-export { construct, lib }
+export { bootstrap, lib }

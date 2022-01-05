@@ -40,8 +40,8 @@ declare namespace Billet {
   export type ByUUID = Record<UUID, Topic>
 
   export interface Lookups {
-    byAlias: ByAlias
-    byUUID: ByUUID
+    topicsByAlias: ByAlias
+    topicsByUUID: ByUUID
   }
 
   export interface Traversals {

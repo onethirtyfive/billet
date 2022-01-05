@@ -2,14 +2,13 @@ import { createReadStream } from 'fs'
 import { decodeMultiStream } from '@msgpack/msgpack'
 import readline from 'readline'
 
-import { construct } from '../src/topics'
+import { bootstrap } from '../src/runtime'
 import { streamingMultijson, streamingMsgpack } from '../src/streaming'
-import { deserializing } from '../src/deserialization'
 
 async function main(mode: string) {
   const src = createReadStream(`./examples/data/${mode}/events.${mode}`)
 
-  let rawEventStream: AsyncIterable<object>
+  let rawEventStream
 
   switch (mode) {
     case 'multijson':
@@ -25,16 +24,32 @@ async function main(mode: string) {
       throw new Error(`unknown mode ${mode}`)
   }
 
-  const snapshotEvents =
-    await deserializing(rawEventStream)
-      .λevents()
-      .filtering(event => event.name === '__billet__:snapshot')
-      .taking(1)
+  console.log('\nAll events encountered...')
+  const potentiallyAllDeserializedEvents = rawEventStream.deserializing()
+  const desiredTakeSnapshotEvents =
+    await potentiallyAllDeserializedEvents.λ()
+      .tracing(event => console.log(' ' + event.name))
+      .onlyTakeSnapshotEvents(1)
       .result() as Billet.TakeSnapshot[]
 
-  const topics = construct(snapshotEvents.pop()!.context)
+  const firstTakeSnapshotEvent = desiredTakeSnapshotEvents.pop()!
+  const runtime = bootstrap(firstTakeSnapshotEvent.context)
 
-  const plan = topics.plan(
+  console.log('\nFirst snapshot...')
+  Object.entries(firstTakeSnapshotEvent.context.relations).forEach(([k, v]) => {
+    console.log(` Relations for '${runtime.topicsByUUID[k].alias}':`)
+    if (v.size > 0) {
+      const aliased =
+        [...v.values()].map(uuid => runtime.topicsByUUID[uuid].alias)
+      console.log('  ' + [...v.keys()] + ' > ' + aliased.join(' | '))
+    }
+    else {
+      console.log('  (none)')
+    }
+  })
+
+  console.log('\nEvent to plan...')
+  const eventToPlan = 
     {
       "uuid": "a4e361d4-7300-46a7-a14e-69a7870c6db4",
       "name": "anticipation.patch",
@@ -46,9 +61,13 @@ async function main(mode: string) {
       },
       "propagations": []
     } as Billet.PropagatedEvent
-  )
+  console.log(eventToPlan)
 
-  console.log(plan)
+  console.log('\nPlanned propagations...')
+  const plan = runtime.plan(eventToPlan)
+  console.log(plan.map(uuid => runtime.topicsByUUID[uuid].alias))
+
+  console.log()
 }
 
 main(process.argv[2])
