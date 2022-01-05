@@ -1,5 +1,7 @@
 import { strict as assert } from 'assert'
 
+import { λevents } from './generation'
+
 type FnDeserialize<T extends Billet.BaseEvent> = (source: unknown) => T
 
 const metaEventDeserializers = {
@@ -47,6 +49,10 @@ const metaEventDeserializers = {
 //      applicable, as this iterable will frequently leave unconsumed data
 function deserializing (source: AsyncIterable<object>) {
   return {
+    λevents: function () {
+      return λevents(this)
+    },
+
     async * [Symbol.asyncIterator]() {
       for await (const item of source) {
         assert(typeof item === 'object', `item not an object: ${item}`)

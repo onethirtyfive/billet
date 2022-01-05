@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "repository": "https://github.com/onethirtyfive/billet",
   "private": false,
-  "type": "module",
   "description": "Simple integrated application event logging",
   "main": "billet.js",
   "license": "MIT",
@@ -15,8 +14,8 @@
     "lib": "lib"
   },
   "scripts": {
-    "planEvent": "TS_NODE_PROJECT=./tsconfig.json node --loader ts-node/esm $PWD/examples/planEvent.ts",
-    "generateMsgpack": "TS_NODE_PROJECT=./tsconfig.json node --loader ts-node/esm $PWD/examples/generateMsgpack.ts",
+    "planEvent": "TS_NODE_PROJECT=./tsconfig.json node -r ts-node/register $PWD/examples/planEvent.ts",
+    "generateMsgpack": "TS_NODE_PROJECT=./tsconfig.json node -r ts-node/register $PWD/examples/generateMsgpack.ts",
     "test": "jest --coverage --watch"
   },
   "dependencies": {
