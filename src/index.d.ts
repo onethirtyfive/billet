@@ -104,10 +104,4 @@ declare namespace Billet {
     topicsByUUID: ByUUID
     plan: (event: AnyEvent) => Propagations
   }
-
-  export interface LibRuntime {
-    curriedLookups: (snapshot: Snapshot) => Lookups
-    curriedTraversals: (lookups: Lookups) => Traversals
-    bootstrap: (snapshot: Snapshot) => Runtime
-  }
 }

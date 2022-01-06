@@ -27,7 +27,7 @@ async function main(mode: string) {
   console.log('\nAll events encountered...')
   const potentiallyAllDeserializedEvents = rawEventStream.deserializingEvents()
   const desiredTakeSnapshotEvents =
-    await potentiallyAllDeserializedEvents.selecting()
+    await potentiallyAllDeserializedEvents.filtering()
       .tracing(event => console.log(' ' + event.name))
       .onlyTakeSnapshotEvents(1)
       .result() as Billet.TakeSnapshot[]

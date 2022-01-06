@@ -4,67 +4,42 @@ declare namespace Billet {
   type FnDeserialize<T extends BaseEvent> = (source: unknown) => T
   type FnApply<T, U> = (item: T) => U
 
-  export interface Selecting<T> {
-    filtering: (fnAssess: FnAssess<T>) => Awaited<Selecting<T>>
-    taking: (count: number) => Awaited<Selecting<T>>
-    tracing: (fnTrace: FnTrace<T>) => Awaited<Selecting<T>>
+  export interface Filtering<T> {
+    filtering: (fnAssess: FnAssess<T>) => Awaited<Filtering<T>>
+    taking: (count: number) => Awaited<Filtering<T>>
+    tracing: (fnTrace: FnTrace<T>) => Awaited<Filtering<T>>
     [Symbol.asyncIterator](): AsyncGenerator<T>
 
-    // n.b. all below exit the current λEvents context
     result: () => Promise<T[]>
-
-    // TODO this doesn't belong here
-    mapping: <U>(fnApply: FnApply<T, U>) => Awaited<Selecting<U>>
   }
 
-  export interface SelectingEvents {
-    filtering: (fnAssess: FnAssess<AnyEvent>) => Awaited<SelectingEvents>
-    taking: (count: number) => Awaited<SelectingEvents>
-    tracing: (fnTrace: FnTrace<AnyEvent>) => Awaited<SelectingEvents>
-    onlyMetaEvents: (count?: number) => Awaited<SelectingEvents>
-    onlyTakeSnapshotEvents: (count?: number) => Awaited<SelectingEvents>
-    since: (epoch: number) => Awaited<SelectingEvents>
-    after: (epoch: number) => Awaited<SelectingEvents>
-    before: (epoch: number) => Awaited<SelectingEvents>
-    until: (epoch: number) => Awaited<SelectingEvents>
-    only: (query: string) => Awaited<SelectingEvents>
-    except: (query: string) => Awaited<SelectingEvents>
+  export interface FilteringEvents {
+    filtering: (fnAssess: FnAssess<AnyEvent>) => Awaited<FilteringEvents>
+    taking: (count: number) => Awaited<FilteringEvents>
+    tracing: (fnTrace: FnTrace<AnyEvent>) => Awaited<FilteringEvents>
+    onlyMetaEvents: (count?: number) => Awaited<FilteringEvents>
+    onlyTakeSnapshotEvents: (count?: number) => Awaited<FilteringEvents>
+    since: (epoch: number) => Awaited<FilteringEvents>
+    after: (epoch: number) => Awaited<FilteringEvents>
+    before: (epoch: number) => Awaited<FilteringEvents>
+    until: (epoch: number) => Awaited<FilteringEvents>
+    only: (query: string) => Awaited<FilteringEvents>
+    except: (query: string) => Awaited<FilteringEvents>
     [Symbol.asyncIterator](): AsyncGenerator<AnyEvent>
 
-    // n.b. all below exit the current λEvents context
     result: () => Promise<AnyEvent[]>
-
-    // TODO this doesn't belong here
-    mapping: <T>(fnApply: FnApply<AnyEvent, T>) => Awaited<Selecting<T>>
   }
 
   type AnyEvent = MetaEvent | PropagatedEvent
 
   export interface DeserializingEvents {
     deserializers: Record<MetaEventName, (source: unknown) => MetaEvent>
-    selecting: () => SelectingEvents
+    filtering: () => FilteringEvents
     [Symbol.asyncIterator](): AsyncGenerator<AnyEvent>
   }
 
   export interface Streaming extends AsyncIterable<object> {
     deserializingEvents: () => DeserializingEvents
     [Symbol.asyncIterator](): AsyncGenerator<object>
-  }
-
-  export interface LibSelecting {
-    selecting: <T>(items: AsyncIterable<T>) => Selecting<T>
-  }
-
-  export interface LibSelectingEvents {
-    selectingEvents: (events: AsyncIterable<AnyEvent>) => SelectingEvents
-  }
-
-  export interface LibDeserializing {
-    deserializingEvents: (source: AsyncIterable<object>) => DeserializingEvents
-  }
-
-  export interface LibStreaming {
-    streamingMultijson: (iterable: AsyncIterable<string>) => Streaming
-    streamingMsgpack: (iterable: AsyncIterable<BufferSource>) => Streaming
   }
 }

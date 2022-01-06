@@ -1,6 +1,6 @@
 import { strict as assert } from 'assert'
 
-import { libSelectingEvents } from './selectingEvents'
+import { libFilteringEvents } from './filteringEvents'
 
 export const libDeserializing: Billet.LibDeserializing = {
   deserializingEvents: function (source): Billet.DeserializingEvents {
@@ -46,8 +46,8 @@ export const libDeserializing: Billet.LibDeserializing = {
         }
       },
 
-      selecting: function () {
-        return libSelectingEvents.selectingEvents(this)
+      filtering: function () {
+        return libFilteringEvents.filteringEvents(this)
       },
 
       async * [Symbol.asyncIterator](): AsyncGenerator<Billet.AnyEvent> {

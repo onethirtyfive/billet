@@ -1,22 +1,19 @@
 import jsonata from 'jsonata'
 
-import { tracing, filtering, taking, mapping } from '../replay'
-import { libSelecting } from './selecting'
+import { libReplay } from '../replay'
+import { libFiltering } from './filtering'
 
-export const libSelectingEvents: Billet.LibSelectingEvents = {
-  selectingEvents: function (events): Billet.SelectingEvents {
+export const libFilteringEvents: Billet.LibFilteringEvents = {
+  filteringEvents: function (events): Billet.FilteringEvents {
     return {
-      filtering: function (fnAssess) {
-        return libSelectingEvents.selectingEvents(filtering(events, fnAssess))
-      },
+      filtering: (fnAssess) =>
+        this.filteringEvents(libReplay.filtering(events, fnAssess)),
 
-      taking: function (count: number) {
-        return libSelectingEvents.selectingEvents(taking(events, count))
-      },
+      taking: (count) =>
+        this.filteringEvents(libReplay.taking(events, count)),
 
-      tracing: function (fnTrace) {
-        return libSelectingEvents.selectingEvents(tracing(events, fnTrace))
-      },
+      tracing: (fnTrace) =>
+        this.filteringEvents(libReplay.tracing(events, fnTrace)),
 
       onlyMetaEvents: function(count: number | undefined = undefined) {
         const basis =
@@ -75,10 +72,6 @@ export const libSelectingEvents: Billet.LibSelectingEvents = {
           return events
         })()
       },
-
-      mapping: function<T> (fnApply: Billet.FnApply<Billet.AnyEvent, T>) {
-        return libSelecting.selecting<T>(mapping(events, fnApply))
-      }
     }
   }
 }
