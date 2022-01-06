@@ -2,7 +2,7 @@ import { createReadStream, createWriteStream } from 'fs'
 import { encode } from '@msgpack/msgpack'
 import readline from 'readline'
 
-import { streamingMultijson } from '../src/streaming'
+import { streamingMultijson } from '../src/replay/streaming'
 
 async function main () {
   const src = createReadStream(`./examples/data/multijson/events.multijson`)

@@ -1,4 +1,4 @@
-import { tracing, filtering, taking, mapping } from '../generation'
+import { tracing, filtering, taking, mapping } from '../replay'
 
 // in vim, 'λ' is ctrl + k, *, l
 function λ<T>(items: AsyncIterable<T>): Billet.λ<T> {

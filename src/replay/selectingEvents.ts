@@ -1,7 +1,7 @@
 import jsonata from 'jsonata'
 
-import { tracing, filtering, taking, mapping } from '../generation'
-import { λ } from './λ'
+import { tracing, filtering, taking, mapping } from '../replay'
+import { λ } from './selecting'
 
 function λevents<T extends Billet.BaseEvent>(
   events: AsyncIterable<T>

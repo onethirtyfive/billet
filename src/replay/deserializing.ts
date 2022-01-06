@@ -1,6 +1,6 @@
 import { strict as assert } from 'assert'
 
-import { λevents } from './generation/λevents'
+import { λevents } from './selectingEvents'
 
 type FnDeserialize<T extends Billet.BaseEvent> = (source: unknown) => T
 

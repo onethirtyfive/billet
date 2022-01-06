@@ -3,7 +3,7 @@ import { decodeMultiStream } from '@msgpack/msgpack'
 import readline from 'readline'
 
 import { bootstrap } from '../src/runtime'
-import { streamingMultijson, streamingMsgpack } from '../src/streaming'
+import { streamingMultijson, streamingMsgpack } from '../src/replay/streaming'
 
 async function main(mode: string) {
   const src = createReadStream(`./examples/data/${mode}/events.${mode}`)
