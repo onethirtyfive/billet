@@ -1,39 +1,39 @@
 import { strict as assert } from 'assert'
-import { deserializing } from './deserialization'
+import { libDeserializing } from './deserializing'
 
 // n.b. generic because they will be used for both events and checksums
 
-function streamingMsgpack(iterable: AsyncIterable<BufferSource>) {
-  return {
-    deserializing: function () {
-      return deserializing(this)
-    },
+export const libStreaming: Billet.LibStreaming = {
+  streamingMsgpack: function (iterable) {
+    return {
+      deserializingEvents: function () {
+        return libDeserializing.deserializingEvents(this)
+      },
 
-    async * [Symbol.asyncIterator]() {
-      for await (const item of iterable) {
-        assert(typeof item === 'object', `not an object: ${item}`)
-        yield item
+      async * [Symbol.asyncIterator]() {
+        for await (const item of iterable) {
+          assert(typeof item === 'object', `not an object: ${item}`)
+          yield item as object
+        }
       }
     }
-  }
-}
+  },
 
-function streamingMultijson(iterable: AsyncIterable<string>) {
-  return {
-    deserializing: function () {
-      return deserializing(this)
-    },
+  streamingMultijson: function (iterable: AsyncIterable<string>) {
+    return {
+      deserializingEvents: function () {
+        return libDeserializing.deserializingEvents(this)
+      },
 
-    async * [Symbol.asyncIterator]() {
-      for await (const line of iterable) {
-        if (line.length > 0) {
-          const parsed = JSON.parse(line)
-          assert(typeof parsed === 'object', `not an object: ${parsed}`)
-          yield parsed
+      async * [Symbol.asyncIterator]() {
+        for await (const line of iterable) {
+          if (line.length > 0) {
+            const parsed = JSON.parse(line)
+            assert(typeof parsed === 'object', `not an object: ${parsed}`)
+            yield parsed
+          }
         }
       }
     }
   }
 }
-
-export { streamingMsgpack, streamingMultijson }

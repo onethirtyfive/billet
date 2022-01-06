@@ -1,36 +1,30 @@
 import { tracing, filtering, taking, mapping } from '../replay'
 
-// in vim, 'λ' is ctrl + k, *, l
-function λ<T>(items: AsyncIterable<T>): Billet.λ<T> {
-  return {
-    filtering: (fnAssess: Billet.FnAssess<T>) =>
-      λ(filtering<T>(items, fnAssess)),
+export const libSelecting: Billet.LibSelecting = {
+  selecting: function<T> (items: AsyncIterable<T>): Billet.Selecting<T> {
+    return {
+      tracing: (fnTrace) => this.selecting(tracing(items, fnTrace)),
+      filtering: (fnAssess) => this.selecting(filtering(items, fnAssess)),
+      taking: (count) => this.selecting(taking(items, count)),
 
-    taking: (count: number) => λ(taking<T>(items, count)),
+      async * [Symbol.asyncIterator]() {
+        for await (const item of items)
+          yield item
+      },
 
-    tracing: function (fnTrace: (event: T) => void) {
-      return λ(tracing<T>(items, fnTrace))
-    },
+      // n.b. below functions change type context
 
-    async * [Symbol.asyncIterator]() {
-      for await (const item of items)
-        yield item
-    },
+      result: async function () {
+        return await (async () => {
+          const items = []
+          for await (const item of this)
+            items.push(item as unknown as T)
+          return items
+        })()
+      },
 
-    // n.b. below functions change type context
-
-    result: async function () {
-      return await (async () => {
-        const items: T[] = []
-        for await (const item of this)
-          items.push(item as unknown as T)
-        return items
-      })()
-    },
-
-    mapping: <U>(fnApply: Billet.FnApply<T, U>) =>
-      λ(mapping<T, U>(items, fnApply))
+      mapping: <U>(fnApply: Billet.FnApply<T, U>) =>
+        this.selecting(mapping(items, fnApply))
+    }
   }
 }
-
-export { λ }

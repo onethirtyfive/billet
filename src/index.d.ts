@@ -39,16 +39,6 @@ declare namespace Billet {
   export type ByAlias = Record<Alias, Topic>
   export type ByUUID = Record<UUID, Topic>
 
-  export interface Lookups {
-    topicsByAlias: ByAlias
-    topicsByUUID: ByUUID
-  }
-
-  export interface Traversals {
-    propagate: (event: BaseEvent) => Propagations
-    validate: () => void
-  }
-
   export type Topics = Lookups & Traversals 
 
   export interface Document {
@@ -96,5 +86,28 @@ declare namespace Billet {
 
   export interface PropagatedEvent extends BaseEvent {
     propagations: UUID[]
+  }
+
+  export interface Lookups {
+    topicsByAlias: ByAlias
+    topicsByUUID: ByUUID
+  }
+
+  export interface Traversals {
+    plan: (event: AnyEvent) => Propagations
+    validate: () => void
+  }
+
+  export interface Runtime {
+    settings: Settings
+    topicsByAlias: ByAlias
+    topicsByUUID: ByUUID
+    plan: (event: AnyEvent) => Propagations
+  }
+
+  export interface LibRuntime {
+    curriedLookups: (snapshot: Snapshot) => Lookups
+    curriedTraversals: (lookups: Lookups) => Traversals
+    bootstrap: (snapshot: Snapshot) => Runtime
   }
 }

@@ -2,8 +2,8 @@ import { createReadStream } from 'fs'
 import { decodeMultiStream } from '@msgpack/msgpack'
 import readline from 'readline'
 
-import { bootstrap } from '../src/runtime'
-import { streamingMultijson, streamingMsgpack } from '../src/replay/streaming'
+import { libRuntime } from '../src/runtime'
+import { libStreaming } from '../src/replay/streaming'
 
 async function main(mode: string) {
   const src = createReadStream(`./examples/data/${mode}/events.${mode}`)
@@ -14,26 +14,26 @@ async function main(mode: string) {
     case 'multijson':
       const lineStream =
         readline.createInterface({ input: src, crlfDelay: Infinity })
-      rawEventStream = streamingMultijson(lineStream)
+      rawEventStream = libStreaming.streamingMultijson(lineStream)
       break
     case 'msgpack':
       const msgpackStream = decodeMultiStream(src) as AsyncIterable<BufferSource>
-      rawEventStream = streamingMsgpack(msgpackStream)
+      rawEventStream = libStreaming.streamingMsgpack(msgpackStream)
       break
     default:
       throw new Error(`unknown mode ${mode}`)
   }
 
   console.log('\nAll events encountered...')
-  const potentiallyAllDeserializedEvents = rawEventStream.deserializing()
+  const potentiallyAllDeserializedEvents = rawEventStream.deserializingEvents()
   const desiredTakeSnapshotEvents =
-    await potentiallyAllDeserializedEvents.λ()
+    await potentiallyAllDeserializedEvents.selecting()
       .tracing(event => console.log(' ' + event.name))
       .onlyTakeSnapshotEvents(1)
       .result() as Billet.TakeSnapshot[]
 
   const firstTakeSnapshotEvent = desiredTakeSnapshotEvents.pop()!
-  const runtime = bootstrap(firstTakeSnapshotEvent.context)
+  const runtime = libRuntime.bootstrap(firstTakeSnapshotEvent.context)
 
   console.log('\nFirst snapshot...')
   Object.entries(firstTakeSnapshotEvent.context.relations).forEach(([k, v]) => {
