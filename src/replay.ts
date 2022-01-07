@@ -15,7 +15,7 @@ export const libReplay: Billet.LibReplay = {
     }
   },
 
-  filtering: <T>(source: AsyncIterable<T>, fnAssess: Billet.FnAssess<T>) => {
+  predicating: <T>(source: AsyncIterable<T>, fnAssess: Billet.FnAssess<T>) => {
     return {
       async * [Symbol.asyncIterator]() {
         for await (const item of source)

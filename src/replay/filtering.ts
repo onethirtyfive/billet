@@ -5,8 +5,8 @@ export const libFiltering: Billet.LibFiltering = {
     return {
       tracing: (fnTrace) =>
         this.filtering(libReplay.tracing(items, fnTrace)),
-      filtering: (fnAssess) =>
-        this.filtering(libReplay.filtering(items, fnAssess)),
+      predicating: (fnAssess) =>
+        this.filtering(libReplay.predicating(items, fnAssess)),
       taking: (count) =>
         this.filtering(libReplay.taking(items, count)),
 
@@ -18,12 +18,10 @@ export const libFiltering: Billet.LibFiltering = {
       // n.b. below functions change type context
 
       result: async function () {
-        return await (async () => {
-          const items = []
-          for await (const item of this)
-            items.push(item as unknown as T)
-          return items
-        })()
+        const items = []
+        for await (const item of this)
+          items.push(item as unknown as T)
+        return items
       }
     }
   }

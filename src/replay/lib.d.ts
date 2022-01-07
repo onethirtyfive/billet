@@ -2,7 +2,7 @@ declare namespace Billet {
   export interface LibReplay {
     tracing: <T>(source: AsyncIterable<T>, fnTrace: FnTrace<T>) =>
       AsyncIterable<T>
-    filtering: <T>(source: AsyncIterable<T>, fnAssess: FnAssess<T>) =>
+    predicating: <T>(source: AsyncIterable<T>, fnAssess: FnAssess<T>) =>
       AsyncIterable<T>
     taking: <T>(source: AsyncIterable<T>, count: number) =>
       AsyncIterable<T>

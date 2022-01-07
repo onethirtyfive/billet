@@ -5,7 +5,7 @@ declare namespace Billet {
   type FnApply<T, U> = (item: T) => U
 
   export interface Filtering<T> {
-    filtering: (fnAssess: FnAssess<T>) => Awaited<Filtering<T>>
+    predicating: (fnAssess: FnAssess<T>) => Awaited<Filtering<T>>
     taking: (count: number) => Awaited<Filtering<T>>
     tracing: (fnTrace: FnTrace<T>) => Awaited<Filtering<T>>
     [Symbol.asyncIterator](): AsyncGenerator<T>
@@ -14,7 +14,7 @@ declare namespace Billet {
   }
 
   export interface FilteringEvents {
-    filtering: (fnAssess: FnAssess<AnyEvent>) => Awaited<FilteringEvents>
+    predicating: (fnAssess: FnAssess<AnyEvent>) => Awaited<FilteringEvents>
     taking: (count: number) => Awaited<FilteringEvents>
     tracing: (fnTrace: FnTrace<AnyEvent>) => Awaited<FilteringEvents>
     onlyMetaEvents: (count?: number) => Awaited<FilteringEvents>
