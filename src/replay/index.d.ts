@@ -33,7 +33,7 @@ declare namespace Billet {
   type AnyEvent = MetaEvent | PropagatedEvent
 
   export interface DeserializingEvents {
-    deserializers: Record<MetaEventName, (source: unknown) => MetaEvent>
+    deserializers: Record<MetaEventName, (source: SerialEvent) => MetaEvent>
     filtering: () => FilteringEvents
     [Symbol.asyncIterator](): AsyncGenerator<AnyEvent>
   }
@@ -41,5 +41,39 @@ declare namespace Billet {
   export interface Streaming extends AsyncIterable<object> {
     deserializingEvents: () => DeserializingEvents
     [Symbol.asyncIterator](): AsyncGenerator<object>
+  }
+
+  interface SerialSettings {
+    checksumAlgorithm: ChecksumAlgorithm
+  }
+
+  interface SerialAliases {
+    [key: string]: UUID
+  }
+
+  interface SerialContingentPaths {
+    [key: Criterion]: UUID[]
+  }
+
+  interface SerialRelations {
+    [key: UUID]: SerialContingentPaths
+  }
+
+  interface SerialReceipts {
+    [key: UUID]: UUID[]
+  }
+
+  interface SerialSnapshot {
+    settings: SerialSettings
+    aliases: SerialAliases
+    relations: SerialRelations
+    receipts: SerialReceipts
+  }
+
+  interface SerialEvent {
+    uuid: Billet.UUID
+    timestamp: number
+    name: string
+    context: object
   }
 }

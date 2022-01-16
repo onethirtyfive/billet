@@ -8,11 +8,11 @@ async function main () {
   const src = createReadStream(`./examples/data/multijson/events.multijson`)
   const dst = createWriteStream(`./examples/data/msgpack/events.msgpack`)
   const lineStream = readline.createInterface({ input: src, crlfDelay: Infinity })
-  const rawEventStream =
+  const serialEventStream =
     libStreaming.streamingMultijson(lineStream) as AsyncIterable<object>
 
-  for await (const rawEvent of rawEventStream)
-    dst.write(encode(rawEvent))
+  for await (const serialEvent of serialEventStream)
+    dst.write(encode(serialEvent))
 }
 
 main()

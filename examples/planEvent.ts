@@ -8,24 +8,24 @@ import { libStreaming } from '../src/replay/streaming'
 async function main(mode: string) {
   const src = createReadStream(`./examples/data/${mode}/events.${mode}`)
 
-  let rawEventStream
+  let serialEventStream
 
   switch (mode) {
     case 'multijson':
       const lineStream =
         readline.createInterface({ input: src, crlfDelay: Infinity })
-      rawEventStream = libStreaming.streamingMultijson(lineStream)
+      serialEventStream = libStreaming.streamingMultijson(lineStream)
       break
     case 'msgpack':
       const msgpackStream = decodeMultiStream(src) as AsyncIterable<BufferSource>
-      rawEventStream = libStreaming.streamingMsgpack(msgpackStream)
+      serialEventStream = libStreaming.streamingMsgpack(msgpackStream)
       break
     default:
       throw new Error(`unknown mode ${mode}`)
   }
 
-  console.log('\nAll events encountered...')
-  const potentiallyAllDeserializedEvents = rawEventStream.deserializingEvents()
+  console.log('\nEvents encountered during replay:')
+  const potentiallyAllDeserializedEvents = serialEventStream.deserializingEvents()
   const desiredTakeSnapshotEvents =
     await potentiallyAllDeserializedEvents.filtering()
       .tracing(event => console.log(' ' + event.name))
@@ -35,20 +35,7 @@ async function main(mode: string) {
   const firstTakeSnapshotEvent = desiredTakeSnapshotEvents.pop()!
   const runtime = libRuntime.bootstrap(firstTakeSnapshotEvent.context)
 
-  console.log('\nFirst snapshot...')
-  Object.entries(firstTakeSnapshotEvent.context.relations).forEach(([k, v]) => {
-    console.log(` Relations for '${runtime.topicsByUUID[k].alias}':`)
-    if (v.size > 0) {
-      const aliased =
-        [...v.values()].map(uuid => runtime.topicsByUUID[uuid].alias)
-      console.log('  ' + [...v.keys()] + ' > ' + aliased.join(' | '))
-    }
-    else {
-      console.log('  (none)')
-    }
-  })
-
-  console.log('\nEvent to plan...')
+  console.log('\nExample event to plan:')
   const eventToPlan = 
     {
       "uuid": "a4e361d4-7300-46a7-a14e-69a7870c6db4",
@@ -63,9 +50,9 @@ async function main(mode: string) {
     } as Billet.PropagatedEvent
   console.log(eventToPlan)
 
-  console.log('\nPlanned propagations...')
+  console.log('\nPropagations planned:')
   const plan = runtime.plan(eventToPlan)
-  console.log(plan.map(uuid => runtime.topicsByUUID[uuid].alias))
+  console.log([...plan].map(uuid => runtime.topicsByUUID.get(uuid)!.alias))
 
   console.log()
 }

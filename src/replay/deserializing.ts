@@ -9,39 +9,47 @@ export const libDeserializing: Billet.LibDeserializing = {
       //      applicable, as this iterable will frequently leave unconsumed data
       deserializers: {
         '__billet__.settings:update':
-          source => source as Billet.UpdateSettings,
+          // TODO: assert other properties of serialized representation object
+          serialEvent => serialEvent as Billet.UpdateSettings,
 
         '__billet__.graph.topic:upsert':
-          source => source as Billet.UpsertGraphTopic,
+          // TODO: assert other properties of serialized representation object
+          serialEvent => serialEvent as Billet.UpsertGraphTopic,
 
         // n.b. To be JSON-compatible, the snapshot's relations are serialized as
         //      Record<UUID,[Criterion, UUID][]>. We must transform this into the
         //      more usable Record<UUID, Map<Criterion, UUID>> type at runtime for:
         //        1. guaranteed iteration in insertion order, which enables
         //        2. deterministically-ordered event propagations
-        '__billet__:snapshot': source => {
-          const serializedRepresentation = source as Billet.TakeSnapshot
+        '__billet__:snapshot': function (serialEvent: Billet.SerialEvent) {
+          const snapshot = serialEvent.context as Billet.SerialSnapshot
 
-          // TODO: assert other properties of serialized representation object
           assert(
-            typeof serializedRepresentation === 'object',
-            `serialized representation not an object: ${serializedRepresentation}`
+            typeof serialEvent === 'object',
+            `serialized representation not an object: ${serialEvent}`
           )
 
-          const relationsRepr = Object.fromEntries(
-            Object
-              .entries(serializedRepresentation.context.relations)
-              .map(([topicUUID, entries]) => [topicUUID, new Map(entries)]
+          // TODO: validate data
+          const settings = new Map(Object.entries(snapshot.settings).sort())
+          const aliases = new Map(Object.entries(snapshot.aliases).sort())
+          const relations = new Map(
+            Object.entries(snapshot.relations)
+              .sort()
+              .map(([uuid, contingentPaths]) =>
+                [uuid, new Map(Object.entries(contingentPaths).sort())]
             )
+          )
+          const receipts = new Map(
+            Object.entries(snapshot.receipts)
+              .sort() // by topic uuid
+              .map(([uuid, receipts]) => [uuid, new Set(receipts)])
           )
 
           return {
-            ...serializedRepresentation,
+            uuid: serialEvent.name as Billet.UUID,
+            timestamp: serialEvent.timestamp as number,
             name: '__billet__:snapshot',
-            context: {
-              ...serializedRepresentation.context,
-              relations: relationsRepr
-            }
+            context: { settings, aliases, relations, receipts }
           }
         }
       },
@@ -60,7 +68,7 @@ export const libDeserializing: Billet.LibDeserializing = {
             case '__billet__.settings:update':
             case '__billet__.graph.topic:upsert':
             case '__billet__:snapshot':
-              yield this.deserializers[name](item) as Billet.MetaEvent
+              yield this.deserializers[name](item as Billet.SerialEvent) as Billet.MetaEvent
               break
             default:
               yield item as Billet.PropagatedEvent

@@ -15,9 +15,9 @@ declare namespace Billet {
   interface Settings {
     checksumAlgorithm: ChecksumAlgorithm
   }
-  export type Aliases = Record<Alias, UUID>
-  export type Relations = Record<UUID, ContingentPaths>
-  export type Receipts = Record<UUID, Propagations>
+  export type Aliases = Map<Alias, UUID>
+  export type Relations = Map<UUID, ContingentPaths>
+  export type Receipts = Map<UUID, Propagations>
 
   export interface Snapshot {
     settings: Settings
@@ -26,8 +26,9 @@ declare namespace Billet {
     receipts: Receipts
   }
 
-  export type ContingentPaths = Map<string, UUID>
-  export type Propagations = UUID[]
+  export type Criterion = string
+  export type ContingentPaths = Map<Criterion, Set<UUID>>
+  export type Propagations = Set<UUID>
 
   export interface Topic {
     alias: Alias
@@ -36,8 +37,8 @@ declare namespace Billet {
     propagations: Propagations
   }
 
-  export type ByAlias = Record<Alias, Topic>
-  export type ByUUID = Record<UUID, Topic>
+  export type ByAlias = Map<Alias, Topic>
+  export type ByUUID = Map<UUID, Topic>
 
   export type Topics = Lookups & Traversals 
 
